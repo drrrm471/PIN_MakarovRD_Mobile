@@ -1,0 +1,316 @@
+# **Отчет по лабораторной работе №1: «Установка среды разработки и запуск первого мобильного приложения на Jetpack Compose»**
+
+## **Сведения о студенте**
+
+**Дата:** 2026-10-18  
+**Семестр:** 3 курс, 5 семестр  
+**Группа:** ПИН-б-о-24-1  
+**Дисциплина:** Программирование мобильных устройств  
+**Студент:** Макаров Роман Дмитриевич
+
+### **Ссылка на репозиторий GitHub**
+
+```
+https://github.com/drrrm471/PIN_MakarovRD_Mobile
+```
+
+### **Структура каталога работы**
+
+```
+lab0102/
+├── MainActivity.kt          # Исходный код приложения (весь UI на Jetpack Compose)
+├── README.md                # Отчет по лабораторной работе
+└── screenshots/
+    └── main_screen.png      # Скриншот приложения на эмуляторе
+```
+
+### **1. ЦЕЛЬ РАБОТЫ**
+
+> 1. Установить и настроить среду разработки для Android-приложений (Android Studio).
+> 2. Создать и запустить первое мобильное приложение на **Jetpack Compose**.
+> 3. Освоить базовую навигацию в Android Studio и структуру Compose-проекта.
+> 4. Создать удалённый репозиторий на GitHub и загрузить проект.
+
+### **2. ЗАДАЧИ РАБОТЫ**
+
+**Выполнены следующие задачи:**
+
+> 1. Установка Android Studio (последняя стабильная версия) с официального сайта developer.android.com/studio.
+> 2. Использование JDK, встроенного в Android Studio (JetBrains Runtime); JVM toolchain проекта — 25.
+> 3. Установка компонентов Android SDK через мастер первоначальной настройки и SDK Manager: SDK Platform, Emulator, Build-Tools, Platform-Tools.
+> 4. Создание виртуального устройства Pixel 6 и проверка его запуска.
+> 5. Создание проекта по шаблону **Empty Activity** (Compose): Kotlin, minSdk 24, Kotlin DSL.
+> 6. Изучение структуры Compose-проекта: отсутствие XML-разметки экрана, весь UI в `MainActivity.kt`.
+> 7. Модификация UI: заголовок «Моё первое приложение», имя и группа студента, цвета текста и фона, отступы через `Modifier`.
+> 8. Документирование класса и всех `@Composable`-функций KDoc-комментариями.
+> 9. Запуск приложения на эмуляторе и проверка через `@Preview`.
+> 10. Публикация отчёта, исходного кода `MainActivity.kt` и скриншота в публичном репозитории дисциплины на GitHub.
+
+### **3. ХОД ВЫПОЛНЕНИЯ РАБОТЫ**
+
+**Окружение:** Windows, Android Studio (последняя стабильная версия), эмулятор Pixel 6 (Android API 37), Git for Windows, платформа github.com.
+
+#### **3.1. Установка Android Studio и JDK**
+
+Android Studio скачана с официального сайта developer.android.com/studio и установлена через мастер установки. Отдельная установка JDK не потребовалась: в состав Android Studio входит JetBrains Runtime, которым IDE и Gradle пользуются по умолчанию. Версия JVM toolchain для сборки проекта задана в файле `gradle/gradle-daemon-jvm.properties`:
+
+```
+toolchainVersion=25
+```
+
+#### **3.2. Настройка Android SDK**
+
+При первом запуске мастер настройки (Setup Wizard) в режиме **Standard** установил базовые компоненты SDK. Состав проверен в **Tools → SDK Manager**:
+
+| Вкладка | Компонент |
+|:---|:---|
+| SDK Platforms | Android SDK Platform (API 37) |
+| SDK Tools | Android SDK Build-Tools |
+| SDK Tools | Android Emulator |
+| SDK Tools | Android SDK Platform-Tools |
+
+- **SDK Platform** — библиотеки Android конкретной версии API, под которую компилируется приложение;
+- **Build-Tools** — инструменты сборки APK;
+- **Emulator** — виртуальное Android-устройство;
+- **Platform-Tools** — утилиты связи с устройством (`adb`).
+
+#### **3.3. Создание эмулятора**
+
+Виртуальное устройство создано в **Device Manager** (**Tools → Device Manager → Create Device**):
+
+| Параметр | Значение |
+|:---|:---|
+| Device | Pixel 6 |
+| System Image | Android API 37 |
+| Имя AVD | Pixel 6 API 37.0 |
+
+Эмулятор успешно запускается кнопкой ▶ в Device Manager и отображается в списке устройств на панели запуска.
+
+#### **3.4. Создание Compose-проекта**
+
+**File → New → New Project → Phone and large screens → Empty Activity.** Выбран шаблон Empty Activity с поддержкой Compose (шаблон «Empty Views Activity» относится к устаревшей XML-вёрстке).
+
+| Параметр | Значение |
+|:---|:---|
+| Name | Hello |
+| Package name | `com.example.hello` |
+| Save location | `C:\Users\MSI\Documents\Projects\Working\mobile\lab0102` |
+| Minimum SDK | API 24 ("Nougat"; Android 7.0), ~99,2 % устройств |
+| Build configuration language | Kotlin DSL (`build.gradle.kts`) |
+
+После создания Android Studio выполнила синхронизацию Gradle и загрузила зависимости. Версии из конфигурации проекта:
+
+| Компонент | Версия |
+|:---|:---|
+| Android Gradle Plugin | 9.4.1 |
+| Gradle Wrapper | 9.6.0 |
+| Kotlin / Compose compiler plugin | 2.2.10 |
+| Compose BOM | 2026.02.01 |
+| compileSdk / targetSdk | 37 |
+| minSdk | 24 |
+
+#### **3.5. Изучение структуры Compose-проекта**
+
+- `app/src/main/java/com/example/hello/MainActivity.kt` — точка входа и весь интерфейс;
+- `app/src/main/java/com/example/hello/ui/theme/` — тема приложения: `Color.kt` (цвета), `Theme.kt` (функция `HelloTheme`), `Type.kt` (типографика);
+- `app/src/main/AndroidManifest.xml` — регистрация `MainActivity` как стартового экрана;
+- `app/build.gradle.kts` — параметры SDK и зависимости Compose (`compose-bom`, `material3`, `ui`, `ui-tooling-preview`, `activity-compose`);
+- `gradle/libs.versions.toml` — каталог версий библиотек.
+
+Каталог `res/layout/` в проекте **отсутствует**: разметка экрана описывается Kotlin-кодом через `@Composable`-функции.
+
+Сгенерированный шаблон отличается от шаблона из методички: вместо `Surface` используется `Scaffold`, добавлен вызов `enableEdgeToEdge()`. `Scaffold` передаёт в содержимое отступы `innerPadding`, чтобы интерфейс не заходил под статус-бар и панель навигации, которые при `enableEdgeToEdge()` накладываются поверх приложения.
+
+#### **3.6. Модификация UI**
+
+Функция `Greeting` переработана: теперь она принимает заголовок, имя и группу и выводит их в `Column` по центру экрана с разными стилями.
+
+```kotlin
+setContent {
+    HelloTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            Greeting(
+                title = "Моё первое приложение",
+                name = "Макаров Роман",
+                group = "Группа ПИН-б-о-24-1",
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
+    }
+}
+```
+
+```kotlin
+@Composable
+fun Greeting(
+    title: String,
+    name: String,
+    group: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFE3F2FD))
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = title,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF0D47A1)
+        )
+        Text(
+            text = name,
+            fontSize = 20.sp,
+            color = Color(0xFF1976D2)
+        )
+        Text(
+            text = group,
+            fontSize = 16.sp,
+            color = Color.DarkGray
+        )
+    }
+}
+```
+
+Использованные элементы:
+
+| Элемент | Назначение |
+|:---|:---|
+| `Column` | Вертикальное размещение элементов |
+| `Text` | Вывод текста; параметры `fontSize`, `fontWeight`, `color` |
+| `Modifier.fillMaxSize()` | Занять весь доступный размер |
+| `Modifier.background(Color(0xFFE3F2FD))` | Светло-голубой фон экрана |
+| `Modifier.padding(24.dp)` | Внутренний отступ 24 dp |
+| `Arrangement.spacedBy(12.dp, Alignment.CenterVertically)` | Промежуток 12 dp между элементами, группа по центру по вертикали |
+| `Alignment.CenterHorizontally` | Центрирование по горизонтали |
+| `Color(0xFF0D47A1)` | Цвет в формате ARGB: `FF` — непрозрачность, `0D47A1` — RGB |
+| `dp` / `sp` | Единицы размеров и отступов / размера шрифта |
+
+Порядок модификаторов имеет значение: `background` указан до `padding`, поэтому фон закрашивает всю область, включая отступ.
+
+#### **3.7. Документирование кода (KDoc)**
+
+Класс `MainActivity`, метод `onCreate` и все `@Composable`-функции (`Greeting`, `GreetingPreview`) снабжены KDoc-комментариями с описанием назначения, параметров (`@param`), автора (`@author`), версии (`@version`) и даты (`@since`):
+
+```kotlin
+/**
+ * Composable-функция, отображающая приветствие и данные студента.
+ *
+ * @param title Заголовок экрана.
+ * @param name Имя студента.
+ * @param group Учебная группа студента.
+ * @param modifier Модификатор для настройки внешнего вида.
+ *
+ * @author Макаров Роман (ПИН-б-о-24-1)
+ * @since 2026-10-18
+ */
+```
+
+#### **3.8. Запуск приложения на эмуляторе**
+
+Конфигурация `app` запущена на устройстве **Pixel 6 API 37.0** кнопкой **Run 'app'** (`Shift+F10`). Изменения отображаются корректно, совпадают с окном предпросмотра `@Preview`.
+
+<div align="center">
+<img src="screenshots/main_screen.png" alt="Приложение на эмуляторе Pixel 6" width="320">
+</div>
+
+#### **3.9. Публикация проекта на GitHub**
+
+Работы по дисциплине размещаются в одном репозитории `PIN_MakarovRD_Mobile`: в корне — общий `README.md`, в `other/` — план дисциплины и задания, в каталогах `labXXXX/` — материалы лабораторных работ. В каталог `lab0102/` помещены только отчёт, исходный файл `MainActivity.kt` и скриншот; полный проект Android Studio хранится локально в каталоге `C:\Users\MSI\Documents\Projects\Working\mobile\lab0102`.
+
+<!-- ВЫВОД КОМАНД GIT БУДЕТ ДОБАВЛЕН -->
+
+### **4. ОТВЕТЫ НА КОНТРОЛЬНЫЕ ВОПРОСЫ**
+
+#### **1. Что такое Jetpack Compose и в чём его отличие от XML-вёрстки?**
+
+Jetpack Compose — современный декларативный UI-фреймворк Google для Android. В XML-подходе разметка описывается в отдельных layout-файлах, а код находит элементы (`findViewById`) и вручную меняет их свойства — это императивный стиль. В Compose интерфейс описывается функциями на Kotlin как функция от состояния: при изменении данных Compose сам перестраивает нужные части экрана. UI и логика находятся в одном языке, шаблонного кода значительно меньше.
+
+| Критерий | XML + View | Jetpack Compose |
+|:---|:---|:---|
+| Подход | Императивный | Декларативный |
+| Код | XML + Kotlin/Java | Только Kotlin |
+| Обновление UI | Вручную (`setText`, `setVisibility`) | Автоматическая рекомпозиция |
+| Layout-файлы | Обязательны | Отсутствуют |
+
+#### **2. Что такое `@Composable`-функция? Чем она отличается от обычной функции?**
+
+Функция с аннотацией `@Composable`, описывающая часть интерфейса. Она не возвращает View, а «излучает» элементы в дерево UI; вызывать её можно только из другой `@Composable`-функции или из `setContent`. Компилятор Compose добавляет в неё служебный параметр `Composer`, благодаря чему функция участвует в рекомпозиции — Compose может повторно вызвать её при изменении данных. Обычная функция просто выполняет вычисление и с деревом UI не связана. В работе это `Greeting` и `GreetingPreview`.
+
+#### **3. Что такое `Modifier` и для чего он используется? Приведите примеры.**
+
+`Modifier` — неизменяемая цепочка настроек внешнего вида и поведения элемента: размеры, отступы, фон, рамки, форма, обработка нажатий. Модификаторы вызываются через точку, и порядок важен. Примеры из работы: `Modifier.fillMaxSize()` — растянуть на весь экран, `.background(Color(0xFFE3F2FD))` — фон, `.padding(24.dp)` — отступ, `Modifier.padding(innerPadding)` — отступы от системных панелей. Другие примеры: `size(100.dp)`, `clip(CircleShape)`, `border(2.dp, Color.Gray)`, `clickable { }`.
+
+#### **4. Что такое рекомпозиция и как она работает в Compose?**
+
+Рекомпозиция — повторный вызов `@Composable`-функций при изменении состояния, которое они читают. Compose отслеживает, какая функция какие данные использует, и при их изменении перезапускает только затронутые функции, а не весь экран. Так интерфейс автоматически остаётся согласованным с данными без ручного обновления элементов.
+
+#### **5. Для чего нужна аннотация `@Preview`?**
+
+Для отображения `@Composable`-функции в окне предпросмотра Android Studio (режимы Split/Design) без сборки и запуска на эмуляторе. Это ускоряет вёрстку. Параметры: `showBackground = true` — рисовать фон, `name`, `device`, `uiMode`, `locale` — разные конфигурации. В работе — функция `GreetingPreview`. Функция с `@Preview` используется только в IDE и на устройстве не выполняется.
+
+#### **6. Почему Google рекомендует использовать Jetpack Compose вместо XML?**
+
+- меньше кода: нет layout-файлов и `findViewById`;
+- меньше ошибок: состояние и UI связаны автоматически, нет рассинхронизации и `NullPointerException` из-за разметки;
+- декларативность упрощает чтение и тестирование;
+- полная интеграция с Kotlin (лямбды, корутины, null-безопасность);
+- готовые компоненты Material 3, анимации, темы;
+- Compose — основной развиваемый инструментарий UI для Android, XML поддерживается как легаси.
+
+#### **7. Какова структура Compose-проекта?**
+
+Модуль `app` содержит `AndroidManifest.xml`, Kotlin-код в `java/<пакет>/` и ресурсы в `res/`. Весь интерфейс описывается в Kotlin-файлах (`MainActivity.kt`), каталог `res/layout/` отсутствует. Тема вынесена в пакет `ui/theme/` (`Color.kt`, `Theme.kt`, `Type.kt`). Сборка описывается файлами `build.gradle.kts` (корневой и модуля), `settings.gradle.kts` и каталогом версий `gradle/libs.versions.toml`.
+
+#### **8. Что такое `State` и `remember` в Compose?**
+
+`State` — наблюдаемый контейнер значения (`mutableStateOf(...)`): при изменении значения Compose выполняет рекомпозицию функций, которые его читают. `remember` сохраняет объект между рекомпозициями; без него при каждом повторном вызове функции состояние создавалось бы заново.
+
+```kotlin
+var count by remember { mutableStateOf(0) }
+Button(onClick = { count++ }) {
+    Text("Нажато: $count")
+}
+```
+
+### **5. ИСПОЛЬЗУЕМЫЕ КОМАНДЫ И ДЕЙСТВИЯ**
+
+```
+# Android Studio
+Tools → SDK Manager                        # проверка компонентов SDK
+Tools → Device Manager → Create Device     # создание эмулятора Pixel 6
+File → New → New Project → Empty Activity  # создание Compose-проекта
+Run 'app' (Shift+F10)                      # сборка и запуск на эмуляторе
+Split / Design → Build & Refresh           # предпросмотр @Preview
+```
+
+```bash
+# Локальный репозиторий
+git init
+git status
+git add .gitignore README.md other/
+git commit -m "docs: add course plan, lab tasks and repository README"
+git add lab0102/.gitignore lab0102/app lab0102/gradle lab0102/build.gradle.kts lab0102/settings.gradle.kts lab0102/gradle.properties lab0102/gradlew lab0102/gradlew.bat
+git commit -m "add lab0102"
+git add lab0102/README.md lab0102/screenshots
+git commit -m "add lab0102 report and screenshots"
+git log --oneline
+
+# Удалённый репозиторий
+git remote add origin https://github.com/drrrm471/PIN_MakarovRD_Mobile.git
+git remote -v
+git push -u origin main
+```
+
+### **6. ВЫВОДЫ**
+
+> 1. Установлена и настроена среда разработки Android: Android Studio со встроенным JDK, компоненты Android SDK и эмулятор Pixel 6 (API 37).
+> 2. Создан проект по шаблону Empty Activity на Jetpack Compose (Kotlin, minSdk 24, Kotlin DSL); изучена его структура и отличие от XML-подхода — отсутствие layout-файлов.
+> 3. Разобраны назначение `ComponentActivity`, `onCreate`, `setContent`, темы `HelloTheme`, каркаса `Scaffold` и отступов `innerPadding` в новом шаблоне с `enableEdgeToEdge()`.
+> 4. Модифицирован интерфейс: заголовок, имя и группа студента выведены в `Column`, заданы размеры шрифта, цвета текста и фона, отступы и выравнивание через `Modifier`, `Arrangement` и `Alignment`.
+> 5. Код задокументирован KDoc-комментариями; приложение запущено на эмуляторе и проверено через `@Preview`.
+> 6. Создан репозиторий дисциплины `PIN_MakarovRD_Mobile`: настроен `.gitignore` (исключены результаты сборки, кэши и `local.properties`), выполнены три коммита, проект отправлен на GitHub командой `git push -u origin main`.
