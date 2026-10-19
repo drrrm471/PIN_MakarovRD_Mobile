@@ -3,13 +3,13 @@ package com.example.hello
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +23,7 @@ import com.example.hello.ui.theme.HelloTheme
 
 /**
  * Главная Activity приложения на Jetpack Compose.
- * Отображает экран с приветствием и информацией о студенте.
+ * Отображает экран с приветствием и информацией о пользователе.
  *
  * @author Макаров Роман (ПИН-б-о-24-1)
  * @version 1.0
@@ -39,15 +39,15 @@ class MainActivity : ComponentActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             HelloTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     Greeting(
-                        title = "Моё первое приложение",
                         name = "Макаров Роман",
-                        group = "Группа ПИН-б-о-24-1",
-                        modifier = Modifier.padding(innerPadding)
+                        group = "Группа ПИН-б-о-24-1"
                     )
                 }
             }
@@ -56,23 +56,17 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
- * Composable-функция, отображающая приветствие и данные студента.
+ * Composable-функция, отображающая приветствие, имя и группу пользователя.
  *
- * @param title Заголовок экрана.
- * @param name Имя студента.
- * @param group Учебная группа студента.
+ * @param name Имя пользователя.
+ * @param group Группа пользователя.
  * @param modifier Модификатор для настройки внешнего вида.
  *
  * @author Макаров Роман (ПИН-б-о-24-1)
  * @since 2026-10-18
  */
 @Composable
-fun Greeting(
-    title: String,
-    name: String,
-    group: String,
-    modifier: Modifier = Modifier
-) {
+fun Greeting(name: String, group: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -82,7 +76,7 @@ fun Greeting(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = title,
+            text = "Моё первое приложение",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF0D47A1)
@@ -109,7 +103,6 @@ fun Greeting(
 fun GreetingPreview() {
     HelloTheme {
         Greeting(
-            title = "Моё первое приложение",
             name = "Макаров Роман",
             group = "Группа ПИН-б-о-24-1"
         )

@@ -119,35 +119,38 @@ toolchainVersion=25
 
 Каталог `res/layout/` в проекте **отсутствует**: разметка экрана описывается Kotlin-кодом через `@Composable`-функции.
 
-Сгенерированный шаблон отличается от шаблона из методички: вместо `Surface` используется `Scaffold`, добавлен вызов `enableEdgeToEdge()`. `Scaffold` передаёт в содержимое отступы `innerPadding`, чтобы интерфейс не заходил под статус-бар и панель навигации, которые при `enableEdgeToEdge()` накладываются поверх приложения.
-
 #### **3.6. Модификация UI**
 
-Функция `Greeting` переработана: теперь она принимает заголовок, имя и группу и выводит их в `Column` по центру экрана с разными стилями.
+За основу взят шаблон `MainActivity.kt` из задания. Доработки выполнены по пунктам `TODO`:
+
+- текст `"Hello $name!"` заменён на `"Моё первое приложение"`;
+- добавлено второе текстовое поле с именем и третье — с группой (в `Greeting` добавлен параметр `group`);
+- с помощью `Modifier` заданы цвет фона, размеры и отступы, у текстов — цвет и размер шрифта;
+- в `onCreate` вызов `Greeting("Android")` заменён на вызов с данными студента.
+
+Вызов в `onCreate` (обёртка `Surface` из шаблона сохранена):
 
 ```kotlin
 setContent {
     HelloTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
             Greeting(
-                title = "Моё первое приложение",
                 name = "Макаров Роман",
-                group = "Группа ПИН-б-о-24-1",
-                modifier = Modifier.padding(innerPadding)
+                group = "Группа ПИН-б-о-24-1"
             )
         }
     }
 }
 ```
 
+Доработанная функция `Greeting`:
+
 ```kotlin
 @Composable
-fun Greeting(
-    title: String,
-    name: String,
-    group: String,
-    modifier: Modifier = Modifier
-) {
+fun Greeting(name: String, group: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -157,7 +160,7 @@ fun Greeting(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = title,
+            text = "Моё первое приложение",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF0D47A1)
@@ -180,6 +183,7 @@ fun Greeting(
 
 | Элемент | Назначение |
 |:---|:---|
+| `Surface` | Контейнер из шаблона: занимает весь экран, фон из темы `MaterialTheme.colorScheme.background` |
 | `Column` | Вертикальное размещение элементов |
 | `Text` | Вывод текста; параметры `fontSize`, `fontWeight`, `color` |
 | `Modifier.fillMaxSize()` | Занять весь доступный размер |
@@ -198,11 +202,10 @@ fun Greeting(
 
 ```kotlin
 /**
- * Composable-функция, отображающая приветствие и данные студента.
+ * Composable-функция, отображающая приветствие, имя и группу пользователя.
  *
- * @param title Заголовок экрана.
- * @param name Имя студента.
- * @param group Учебная группа студента.
+ * @param name Имя пользователя.
+ * @param group Группа пользователя.
  * @param modifier Модификатор для настройки внешнего вида.
  *
  * @author Макаров Роман (ПИН-б-о-24-1)
@@ -222,7 +225,129 @@ fun Greeting(
 
 Работы по дисциплине размещаются в одном репозитории `PIN_MakarovRD_Mobile`: в корне — общий `README.md`, в `other/` — план дисциплины и задания, в каталогах `labXXXX/` — материалы лабораторных работ. В каталог `lab0102/` помещены только отчёт, исходный файл `MainActivity.kt` и скриншот; полный проект Android Studio хранится локально в каталоге `C:\Users\MSI\Documents\Projects\Working\mobile\lab0102`.
 
-<!-- ВЫВОД КОМАНД GIT БУДЕТ ДОБАВЛЕН -->
+**Инициализация репозитория.**
+
+```bash
+cd C:\Users\MSI\Documents\Projects\Working\mobile\PIN_MakarovRD_Mobile
+git init
+git status
+```
+
+Вывод команд в терминале:
+
+```
+C:\Users\MSI\Documents\Projects\Working\mobile\PIN_MakarovRD_Mobile>git init
+Initialized empty Git repository in C:/Users/MSI/Documents/Projects/Working/mobile/PIN_MakarovRD_Mobile/.git/
+
+C:\Users\MSI\Documents\Projects\Working\mobile\PIN_MakarovRD_Mobile>git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        README.md
+        lab0102/
+        other/
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+Команда `git init` создала локальную базу данных репозитория (каталог `.git`). Ветка называется `main` благодаря глобальной настройке `init.defaultBranch`. Все файлы находятся в состоянии *Untracked* — Git их видит, но ещё не отслеживает.
+
+**Коммит 1 — описание репозитория, план и задания.**
+
+```bash
+git add README.md other/
+git commit -m "docs: add course plan, lab tasks and repository README"
+```
+
+Вывод команд в терминале:
+
+```
+[main (root-commit) c0c5570] docs: add course plan, lab tasks and repository README
+ 11 files changed, 6700 insertions(+)
+ create mode 100644 README.md
+ create mode 100644 other/plan/0000_plan.md
+ create mode 100644 other/tasks/0102_lab.md
+ create mode 100644 other/tasks/0202_lab.md
+ create mode 100644 other/tasks/0302_lab.md
+ create mode 100644 other/tasks/0402_lab.md
+ create mode 100644 other/tasks/0502_lab.md
+ create mode 100644 other/tasks/0602_lab.md
+ create mode 100644 other/tasks/0702_lab.md
+ create mode 100644 other/tasks/0802_lab.md
+ create mode 100644 other/tasks/0902_lab.md
+```
+
+Пометка `root-commit` означает первый коммит в истории (без родителя). Префикс `docs:` по соглашению Conventional Commits обозначает изменения документации.
+
+**Коммит 2 — материалы лабораторной работы.**
+
+```bash
+git add lab0102/
+git commit -m "add lab0102"
+```
+
+Вывод команд в терминале:
+
+```
+[main 3d9c827] add lab0102
+ 3 files changed, 433 insertions(+)
+ create mode 100644 lab0102/MainActivity.kt
+ create mode 100644 lab0102/README.md
+ create mode 100644 lab0102/screenshots/main_screen.png
+```
+
+В коммит вошли исходный код `MainActivity.kt`, отчёт и скриншот приложения.
+
+**Просмотр истории коммитов.**
+
+```bash
+git log --oneline
+```
+
+Вывод команды в терминале:
+
+```
+3d9c827 (HEAD -> main) add lab0102
+c0c5570 docs: add course plan, lab tasks and repository README
+```
+
+Команда открыла вывод в постраничном просмотрщике `less` (стандартное поведение Git for Windows); выход из просмотра — клавиша `q`.
+
+**Создание удалённого репозитория и отправка изменений.**
+
+На GitHub создан пустой публичный репозиторий `PIN_MakarovRD_Mobile` (**New repository**, без инициализации файлами README и `.gitignore` — иначе на сервере появился бы собственный первый коммит, не связанный с локальной историей).
+
+```bash
+git remote add origin https://github.com/drrrm471/PIN_MakarovRD_Mobile.git
+git remote -v
+git push -u origin main --force
+```
+
+Вывод команды `git remote -v`:
+
+```
+origin  https://github.com/drrrm471/PIN_MakarovRD_Mobile.git (fetch)
+origin  https://github.com/drrrm471/PIN_MakarovRD_Mobile.git (push)
+```
+
+Удалённый репозиторий добавлен под стандартным именем `origin` по HTTPS-адресу. Ключ `-u` связал локальную ветку `main` с `origin/main`, поэтому далее достаточно команды `git push`. Ключ `--force` использован потому, что репозиторий на GitHub был пересоздан с новой историей: принудительная отправка заменяет историю на сервере локальной.
+
+Проверка связи веток:
+
+```bash
+git branch -vv
+```
+
+```
+* main 3d9c827 [origin/main] add lab0102
+```
+
+Метка `[origin/main]` показывает, что локальная ветка `main` отслеживает удалённую и изменения отправлены на GitHub.
+
+**Ссылка на репозиторий:** [github.com/drrrm471/PIN_MakarovRD_Mobile](https://github.com/drrrm471/PIN_MakarovRD_Mobile)
 
 ### **4. ОТВЕТЫ НА КОНТРОЛЬНЫЕ ВОПРОСЫ**
 
@@ -243,7 +368,7 @@ Jetpack Compose — современный декларативный UI-фре�
 
 #### **3. Что такое `Modifier` и для чего он используется? Приведите примеры.**
 
-`Modifier` — неизменяемая цепочка настроек внешнего вида и поведения элемента: размеры, отступы, фон, рамки, форма, обработка нажатий. Модификаторы вызываются через точку, и порядок важен. Примеры из работы: `Modifier.fillMaxSize()` — растянуть на весь экран, `.background(Color(0xFFE3F2FD))` — фон, `.padding(24.dp)` — отступ, `Modifier.padding(innerPadding)` — отступы от системных панелей. Другие примеры: `size(100.dp)`, `clip(CircleShape)`, `border(2.dp, Color.Gray)`, `clickable { }`.
+`Modifier` — неизменяемая цепочка настроек внешнего вида и поведения элемента: размеры, отступы, фон, рамки, форма, обработка нажатий. Модификаторы вызываются через точку, и порядок важен. Примеры из работы: `Modifier.fillMaxSize()` — растянуть на весь экран, `.background(Color(0xFFE3F2FD))` — фон, `.padding(24.dp)` — отступ. Другие примеры: `size(100.dp)`, `clip(CircleShape)`, `border(2.dp, Color.Gray)`, `clickable { }`.
 
 #### **4. Что такое рекомпозиция и как она работает в Compose?**
 
@@ -292,25 +417,23 @@ Split / Design → Build & Refresh           # предпросмотр @Preview
 # Локальный репозиторий
 git init
 git status
-git add .gitignore README.md other/
+git add README.md other/
 git commit -m "docs: add course plan, lab tasks and repository README"
-git add lab0102/.gitignore lab0102/app lab0102/gradle lab0102/build.gradle.kts lab0102/settings.gradle.kts lab0102/gradle.properties lab0102/gradlew lab0102/gradlew.bat
+git add lab0102/
 git commit -m "add lab0102"
-git add lab0102/README.md lab0102/screenshots
-git commit -m "add lab0102 report and screenshots"
 git log --oneline
 
 # Удалённый репозиторий
 git remote add origin https://github.com/drrrm471/PIN_MakarovRD_Mobile.git
 git remote -v
-git push -u origin main
+git push -u origin main --force
 ```
 
 ### **6. ВЫВОДЫ**
 
 > 1. Установлена и настроена среда разработки Android: Android Studio со встроенным JDK, компоненты Android SDK и эмулятор Pixel 6 (API 37).
 > 2. Создан проект по шаблону Empty Activity на Jetpack Compose (Kotlin, minSdk 24, Kotlin DSL); изучена его структура и отличие от XML-подхода — отсутствие layout-файлов.
-> 3. Разобраны назначение `ComponentActivity`, `onCreate`, `setContent`, темы `HelloTheme`, каркаса `Scaffold` и отступов `innerPadding` в новом шаблоне с `enableEdgeToEdge()`.
+> 3. Разобраны назначение `ComponentActivity`, `onCreate`, `setContent`, темы `HelloTheme`, контейнера `Surface`.
 > 4. Модифицирован интерфейс: заголовок, имя и группа студента выведены в `Column`, заданы размеры шрифта, цвета текста и фона, отступы и выравнивание через `Modifier`, `Arrangement` и `Alignment`.
 > 5. Код задокументирован KDoc-комментариями; приложение запущено на эмуляторе и проверено через `@Preview`.
-> 6. Создан репозиторий дисциплины `PIN_MakarovRD_Mobile`: настроен `.gitignore` (исключены результаты сборки, кэши и `local.properties`), выполнены три коммита, проект отправлен на GitHub командой `git push -u origin main`.
+> 6. Создан репозиторий дисциплины `PIN_MakarovRD_Mobile` на GitHub; в него загружены отчёт, исходный код `MainActivity.kt` и скриншот работающего приложения.
