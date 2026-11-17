@@ -17,10 +17,14 @@
 ### 📁 Лабораторная работа №1 (lab0102). Установка среды разработки и запуск первого мобильного приложения на Jetpack Compose
 - Задание: [0102_lab.md](other/tasks/0102_lab.md)
 - Отчет: [README.md](lab0102/README.md)
-- Файлы проекта: [lab0102/](lab0102/)
+- Исходный код: [MainActivity.kt](lab0102/MainActivity.kt)
+- Скриншоты: [screenshots/](lab0102/screenshots/)
 
 ### 📁 Лабораторная работа №2 (lab0202). Основы языка Kotlin. Решение задач
 - Задание: [0202_lab.md](other/tasks/0202_lab.md)
+- Отчет: [README.md](lab0202/README.md)
+- Исходный код: [Main.kt](lab0202/Main.kt), [BasicSyntax.kt](lab0202/BasicSyntax.kt), [NullSafety.kt](lab0202/NullSafety.kt), [DataClasses.kt](lab0202/DataClasses.kt), [Collections.kt](lab0202/Collections.kt), [Coroutines.kt](lab0202/Coroutines.kt), [AdditionalTask.kt](lab0202/AdditionalTask.kt), [TestUtils.kt](lab0202/TestUtils.kt)
+- Скриншоты: [screenshots/](lab0202/screenshots/)
 
 ### 📁 Лабораторная работа №3 (lab0302). Пользовательский интерфейс в Jetpack Compose. Базовые компоненты
 - Задание: [0302_lab.md](other/tasks/0302_lab.md)
